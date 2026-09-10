@@ -8,6 +8,7 @@ import { importPdf } from '../lib/book/import';
 import { CancelledError, PasswordRequiredError } from '../lib/pdf/extract';
 import { usePlayer } from '../state/player';
 import { duration, effectiveWpm, fileSize, percent } from '../lib/format';
+import { Masthead } from './Masthead';
 import { Modal } from './Modal';
 
 /** One file being ingested, tracked so several can run back to back. */
@@ -121,6 +122,8 @@ export function Library({ onOpen }: { onOpen: (id: string) => void }) {
   return (
     <div className="library">
       <div className="library-inner">
+        <Masthead compact={library.length > 0} />
+
         <div
           className={`dropzone${dragOver ? ' over' : ''}`}
           onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}

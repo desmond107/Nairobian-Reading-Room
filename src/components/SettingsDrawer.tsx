@@ -226,6 +226,12 @@ export function SettingsDrawer({ onClose }: { onClose: () => void }) {
               Light
             </button>
           </div>
+          <Toggle
+            label="Reading room"
+            sub="The shelves behind the app. They step back on their own while a book is open."
+            on={settings.backdrop}
+            onChange={(v) => void setSettings({ backdrop: v })}
+          />
         </div>
 
         {book?.quality && (

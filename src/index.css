@@ -7,25 +7,26 @@
    ------------------------------------------------------------------ */
 
 :root {
-  --bg: #14120f;
-  --bg-raised: #1c1a16;
-  --bg-sunken: #100e0c;
-  --panel: #211e19;
-  --line: #302c25;
-  --line-strong: #454036;
+  --bg: #100e0b;
+  --bg-raised: #191612;
+  --bg-sunken: #0a0908;
+  --panel: #221e18;
+  --line: #2f2921;
+  --line-strong: #4a4234;
 
-  --ink: #f2ede3;
-  --ink-soft: #b8b0a2;
-  --ink-faint: #7d766a;
+  --ink: #f2ebdd;
+  --ink-soft: #bcb19c;
+  --ink-faint: #837868;
 
-  --accent: #e8a33d;
-  --accent-soft: #4a3a1c;
-  --accent-ink: #2a1e08;
-  --danger: #e07a5f;
-  --ok: #7fb069;
+  /* Antique brass, the colour of lettering on a good binding. */
+  --accent: #cfa84f;
+  --accent-soft: #3d3117;
+  --accent-ink: #1b1508;
+  --danger: #cf6f56;
+  --ok: #83a86a;
 
-  --page: #f6f1e7;
-  --page-ink: #2a2620;
+  --page: #f7f2e6;
+  --page-ink: #292420;
 
   --radius: 10px;
   --radius-lg: 16px;
@@ -39,20 +40,20 @@
 }
 
 :root[data-theme='light'] {
-  --bg: #f4f0e8;
-  --bg-raised: #fffdf8;
-  --bg-sunken: #e9e3d7;
-  --panel: #fffdf8;
-  --line: #ddd5c6;
-  --line-strong: #c4b9a5;
+  --bg: #efe9db;
+  --bg-raised: #fdfaf2;
+  --bg-sunken: #e4dccb;
+  --panel: #fdfaf2;
+  --line: #d9cfba;
+  --line-strong: #bdb098;
 
-  --ink: #241f18;
-  --ink-soft: #5c5446;
-  --ink-faint: #8b8272;
+  --ink: #221d16;
+  --ink-soft: #574e40;
+  --ink-faint: #857a68;
 
-  --accent: #b06f10;
-  --accent-soft: #f6e6c8;
-  --accent-ink: #fffaf0;
+  --accent: #8c6a1c;
+  --accent-soft: #f2e4c4;
+  --accent-ink: #fffbf2;
 
   --page: #fffdf8;
   --page-ink: #241f18;
@@ -186,7 +187,7 @@ button {
 .library {
   flex: 1;
   overflow-y: auto;
-  padding: 26px 24px 60px;
+  padding: clamp(22px, 5vh, 44px) 24px 64px;
 }
 
 .library-inner { max-width: 1120px; margin: 0 auto; }
@@ -681,9 +682,19 @@ select, input[type='text'], input[type='password'], textarea {
 
 .empty {
   text-align: center;
-  padding: 34px 16px;
-  color: var(--ink-faint);
+  padding: 34px 20px;
+  color: var(--ink-soft);
   font-size: 13.5px;
+}
+
+/* The empty shelf sits over the brightest part of the scene, so it needs a
+   ground of its own rather than bare text on a sunset. */
+.library .empty {
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--bg-raised) 90%, transparent);
+  -webkit-backdrop-filter: blur(22px);
+  backdrop-filter: blur(22px);
 }
 
 .error-bar {
@@ -767,4 +778,479 @@ a:hover { text-decoration: underline; }
 @media (max-width: 620px) {
   .colophon { flex-direction: column; align-items: flex-start; }
   .colophon-legal { text-align: left; }
+}
+
+/* ---- Colophon ----------------------------------------------------- */
+
+.colophon {
+  margin-top: 56px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.colophon-name {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 620;
+  color: var(--ink-soft);
+}
+.colophon-name span {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--ink-faint);
+  margin-top: 3px;
+}
+
+.colophon-legal {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink-faint);
+  text-align: right;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.about-name { margin: 0 0 4px; font-size: 13.5px; font-weight: 620; }
+.about .hint { margin-top: 4px; }
+
+@media (max-width: 620px) {
+  .colophon { flex-direction: column; align-items: flex-start; }
+  .colophon-legal { text-align: left; }
+}
+
+/* ---- Spectrum backdrop -------------------------------------------- */
+
+/*
+   Nine lit panels standing in a dark room, with the treeline running across
+   them and reflecting on the floor. The panels are laid out in a real
+   perspective scene: each sits at its own distance from the camera and the
+   whole rig turns towards the pointer, which is what sells the depth.
+*/
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.backdrop-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(130% 95% at 50% 26%, #1a305f 0%, #12264a 30%, #0a1730 58%, #050c1c 80%, #02050e 100%);
+}
+
+.backdrop-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(54% 42% at 50% 40%, rgb(3 7 16 / 0.32) 0%, rgb(3 7 16 / 0.12) 62%, transparent 100%),
+    radial-gradient(118% 88% at 50% 42%, transparent 52%, rgb(1 3 9 / 0.55) 100%),
+    linear-gradient(180deg, rgb(2 5 14 / 0.55) 0%, rgb(2 5 14 / 0.06) 18%, transparent 56%, rgb(1 3 9 / 0.72) 100%);
+}
+
+.backdrop-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1600px;
+  perspective-origin: 50% 40%;
+  padding-bottom: 12vh;
+}
+
+.backdrop-rig {
+  --px: 0;
+  --py: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-style: preserve-3d;
+  transform:
+    rotateY(calc(var(--px) * 6deg))
+    rotateX(calc(var(--py) * -3.4deg))
+    translateZ(-30px);
+}
+
+.panel-row {
+  display: flex;
+  gap: clamp(7px, 0.75vw, 14px);
+  width: min(1640px, 86vw);
+  height: min(560px, 52vh);
+  transform-style: preserve-3d;
+}
+
+/* The floor reflection: mirrored, dimmed, and fading as it recedes. */
+.panel-row.reflected {
+  height: min(300px, 28vh);
+  margin-top: 3px;
+  opacity: 0.26;
+  transform: scaleY(-1);
+  filter: blur(1.1px) saturate(0.82);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 4%, #000 78%);
+  mask-image: linear-gradient(to bottom, transparent 4%, #000 78%);
+}
+
+.panel {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  transform: translateZ(var(--depth));
+  box-shadow:
+    0 30px 60px rgb(0 0 0 / 0.55),
+    0 0 0 1px rgb(255 255 255 / 0.04);
+}
+
+.panel-sky,
+.panel-art,
+.panel-sheen {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.panel-sky {
+  background: linear-gradient(
+    177deg,
+    var(--sky-top) 0%,
+    var(--sky-mid) 46%,
+    var(--sky-low) 100%
+  );
+}
+
+/* One artwork, nine slices. 900% wide means each panel steps one slice along. */
+.panel-art {
+  inset: auto 0 0 0;
+  height: 58%;
+  background-image: var(--art);
+  background-size: 900% 100%;
+  background-position-x: var(--slice);
+  background-position-y: bottom;
+  background-repeat: no-repeat;
+}
+
+/* A leading-edge highlight and a soft inner shade: the panels read as glass. */
+.panel-sheen {
+  background:
+    linear-gradient(90deg, rgb(255 255 255 / 0.16) 0%, rgb(255 255 255 / 0) 14%),
+    linear-gradient(270deg, rgb(0 0 0 / 0.3) 0%, rgb(0 0 0 / 0) 18%),
+    linear-gradient(180deg, rgb(255 255 255 / 0.08) 0%, rgb(255 255 255 / 0) 8%);
+}
+
+/* Behind the reading column the scene steps back so the text stays first. */
+.backdrop.dimmed { opacity: 0.34; }
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop-rig { transform: translateZ(-30px); }
+}
+
+/* ---- Surfaces float above the backdrop ----------------------------- */
+
+.app { position: relative; z-index: 1; }
+
+.topbar,
+.sidebar,
+.player {
+  background: color-mix(in srgb, var(--bg-raised) 76%, transparent);
+  -webkit-backdrop-filter: blur(22px) saturate(1.3);
+  backdrop-filter: blur(22px) saturate(1.3);
+}
+
+.library { background: transparent; }
+
+.dropzone,
+.colophon,
+.book-card,
+.import-row {
+  background: color-mix(in srgb, var(--bg-raised) 93%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  backdrop-filter: blur(24px) saturate(1.2);
+  box-shadow:
+    0 18px 44px rgb(0 0 0 / 0.42),
+    inset 0 1px 0 rgb(255 255 255 / 0.05);
+}
+
+.colophon {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+}
+
+/* A bare label over a lit sunset cannot be read at any weight, so the section
+   heading carries its own small ground rather than relying on a shadow. */
+.section-head h3,
+.section-head .count {
+  padding: 4px 10px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.empty { text-shadow: 0 1px 10px rgb(2 5 14 / 0.9); }
+
+/* The reading column keeps its own quiet ground; prose comes first. */
+.reading-pane {
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
+}
+
+.drawer {
+  background: color-mix(in srgb, var(--bg-raised) 88%, transparent);
+  -webkit-backdrop-filter: blur(26px) saturate(1.2);
+  backdrop-filter: blur(26px) saturate(1.2);
+}
+
+/* Light theme keeps the spectrum as a soft wash rather than a dark room. */
+:root[data-theme='light'] .backdrop { opacity: 0.5; }
+:root[data-theme='light'] .backdrop.dimmed { opacity: 0.16; }
+:root[data-theme='light'] .backdrop-vignette {
+  background:
+    radial-gradient(105% 80% at 50% 44%, rgb(244 240 232 / 0.3) 40%, rgb(244 240 232 / 0.85) 100%),
+    linear-gradient(180deg, rgb(244 240 232 / 0.6) 0%, rgb(244 240 232 / 0.25) 30%, rgb(244 240 232 / 0.9) 100%);
+}
+
+/* ---- The reading room ---------------------------------------------- */
+
+/*
+   Three shelves receding into lamplight, the front row reflected on the floor.
+   Each row sits at its own distance from the camera, so perspective does the
+   scaling and the rows part from one another as the rig turns. That parallax
+   between rows is the depth; shading alone would only ever look painted on.
+*/
+
+.room {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.room-dark {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 80% at 50% 8%, #241c12 0%, #16110c 38%, #0c0908 70%, #060505 100%);
+}
+
+/* A lamp somewhere above and behind the reader. */
+.room-lamp {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(46% 34% at 50% 6%, rgb(214 168 88 / 0.3) 0%, rgb(180 132 62 / 0.12) 42%, transparent 74%),
+    radial-gradient(80% 46% at 50% 0%, rgb(255 214 140 / 0.13) 0%, transparent 68%);
+}
+
+.room-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1500px;
+  perspective-origin: 50% 34%;
+}
+
+.room-rig {
+  --px: 0;
+  --py: 0;
+  position: relative;
+  width: min(2000px, 118vw);
+  height: min(760px, 76vh);
+  transform-style: preserve-3d;
+  transform:
+    rotateY(calc(var(--px) * 4.4deg))
+    rotateX(calc(var(--py) * -2.4deg));
+}
+
+.room-shelf {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 22%;
+  height: 46%;
+  background-image: var(--art);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  transform: translateZ(var(--depth));
+  /* Rows further back sit higher in frame, the way a real room stacks up. */
+  margin-bottom: calc(var(--depth) * -0.09);
+}
+
+/* The floor: the front row again, mirrored into polished boards. */
+.room-shelf.reflected {
+  bottom: auto;
+  top: 78%;
+  height: 30%;
+  opacity: 0.17;
+  transform: translateZ(0) scaleY(-1);
+  filter: blur(2px) saturate(0.7);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 2%, #000 82%);
+  mask-image: linear-gradient(to bottom, transparent 2%, #000 82%);
+}
+
+/* Air in the room: everything softens towards the edges and the floor. */
+.room-haze {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(58% 44% at 50% 40%, rgb(10 8 6 / 0.42) 0%, rgb(10 8 6 / 0.16) 60%, transparent 100%),
+    radial-gradient(120% 88% at 50% 34%, transparent 48%, rgb(5 4 3 / 0.72) 100%),
+    linear-gradient(180deg, rgb(8 6 5 / 0.5) 0%, transparent 16%, transparent 52%, rgb(5 4 3 / 0.9) 100%);
+}
+
+/* While a book is open the room steps back and the prose comes forward. */
+.room.dimmed { opacity: 0.3; }
+
+@media (prefers-reduced-motion: reduce) {
+  .room-rig { transform: none; }
+}
+
+:root[data-theme='light'] .room { opacity: 0.24; }
+:root[data-theme='light'] .room.dimmed { opacity: 0.09; }
+:root[data-theme='light'] .room-haze {
+  background:
+    radial-gradient(120% 88% at 50% 34%, rgb(239 233 219 / 0.42) 40%, rgb(239 233 219 / 0.9) 100%),
+    linear-gradient(180deg, rgb(239 233 219 / 0.7) 0%, rgb(239 233 219 / 0.3) 28%, rgb(239 233 219 / 0.95) 100%);
+}
+
+/* ---- Surfaces float above the room --------------------------------- */
+
+.app { position: relative; z-index: 1; }
+
+.topbar,
+.sidebar,
+.player {
+  background: color-mix(in srgb, var(--bg-raised) 78%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  backdrop-filter: blur(24px) saturate(1.2);
+}
+
+.library { background: transparent; }
+
+.dropzone,
+.colophon,
+.book-card,
+.import-row,
+.masthead {
+  background: color-mix(in srgb, var(--bg-raised) 92%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(1.15);
+  backdrop-filter: blur(24px) saturate(1.15);
+  box-shadow:
+    0 20px 48px rgb(0 0 0 / 0.45),
+    inset 0 1px 0 rgb(255 255 255 / 0.045);
+}
+
+.reading-pane { background: color-mix(in srgb, var(--bg) 76%, transparent); }
+
+.drawer {
+  background: color-mix(in srgb, var(--bg-raised) 90%, transparent);
+  -webkit-backdrop-filter: blur(28px) saturate(1.15);
+  backdrop-filter: blur(28px) saturate(1.15);
+}
+
+/* ---- Masthead ------------------------------------------------------- */
+
+.masthead {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 34px 38px 30px;
+  margin-bottom: 20px;
+}
+
+.masthead.compact {
+  padding: 24px 30px 22px;
+}
+
+.masthead.compact .masthead-title {
+  font-size: clamp(22px, 2.3vw, 30px);
+  margin-bottom: 10px;
+}
+
+.masthead.compact .masthead-lede {
+  font-size: 14px;
+  max-width: 78ch;
+}
+
+.masthead-rule {
+  display: block;
+  width: 46px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  margin-bottom: 16px;
+}
+
+.masthead-eyebrow {
+  margin: 0 0 10px;
+  font-size: 11.5px;
+  font-weight: 650;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.masthead-title {
+  margin: 0 0 14px;
+  font-family: var(--serif);
+  font-size: clamp(28px, 3.4vw, 44px);
+  font-weight: 500;
+  line-height: 1.14;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+
+.masthead-lede {
+  margin: 0;
+  max-width: 68ch;
+  font-size: 15px;
+  line-height: 1.62;
+  color: var(--ink-soft);
+}
+
+.masthead-points {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(238px, 1fr));
+  gap: 12px 26px;
+  margin: 24px 0 0;
+  padding: 20px 0 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+
+.masthead-points li {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-faint);
+}
+
+.masthead-points svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--accent);
+}
+
+.masthead-points strong {
+  color: var(--ink-soft);
+  font-weight: 620;
+}
+
+@media (max-width: 620px) {
+  .masthead { padding: 26px 22px 24px; }
 }

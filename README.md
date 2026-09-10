@@ -64,6 +64,41 @@ Known Web Speech quirks handled: voices arriving asynchronously, Chrome's
 fifteen-second cutoff (a keep-alive ping), and late `onend` events from a
 cancelled utterance (each utterance is tagged).
 
+## The room
+
+The theme is a reading room at night: ink and walnut grounds, parchment text,
+and antique brass where a binding would carry gilt lettering. Prose is set in a
+system old-style serif, which is the one face on every machine that was drawn
+for reading at length.
+
+Behind the app (`components/ReadingRoom.tsx`) are three shelves receding into
+lamplight, with the front row reflected on the floor. They are drawn, not
+photographed, and generated from fixed seeds in `lib/art/shelves.ts`: spine
+widths, bindings, gilt bands, raised hubs, the occasional leaning volume and the
+occasional gap where a book has been taken away. The whole scene costs a few
+kilobytes and stays sharp at any viewport.
+
+The shelves are real elements in a `perspective` scene rather than a picture of
+shelves. Each row sits at its own distance from the camera and the rig turns a
+few degrees towards the pointer, so the rows part from one another as it moves.
+That parallax between rows is what reads as depth; shading alone only ever looks
+painted on. Spine heights follow a slow wave — not meant to be noticed, but it
+is the one place where the two halves of this app, a library and a voice reading
+aloud, are the same shape.
+
+Reading comes first, so the room drops to a third of its strength whenever a
+book is open, and the reading column keeps its own ground. In light theme it
+falls back to a faint ghost behind warm paper. It holds still for
+`prefers-reduced-motion`, and it can be switched off entirely under Appearance.
+
+## What it says for itself
+
+`components/Masthead.tsx` is the one part of the interface whose whole job is to
+answer "what is this?" before a reader has to try it and find out. On a first
+visit it states the proposition and four supporting points. Once there are books
+on the shelf that question is answered, so the points fold away and the
+statement stays: a returning reader came for their library, not the pitch.
+
 ## Storage
 
 IndexedDB (`lib/store/db.ts`): books, extracted blocks, chapters, the original

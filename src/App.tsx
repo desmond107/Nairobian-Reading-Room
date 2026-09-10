@@ -3,6 +3,7 @@ import { Headphones, Settings as SettingsIcon } from 'lucide-react';
 import { Library } from './components/Library';
 import { Reader } from './components/Reader';
 import { SettingsDrawer } from './components/SettingsDrawer';
+import { ReadingRoom } from './components/ReadingRoom';
 import { installPositionGuard, usePlayer } from './state/player';
 
 export default function App() {
@@ -11,6 +12,7 @@ export default function App() {
   const closeBook = usePlayer((s) => s.closeBook);
   const book = usePlayer((s) => s.book);
   const theme = usePlayer((s) => s.settings.theme);
+  const backdrop = usePlayer((s) => s.settings.backdrop);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [ready, setReady] = useState(false);
 
@@ -24,7 +26,9 @@ export default function App() {
   }, [theme]);
 
   return (
-    <div className="app">
+    <>
+      {backdrop && <ReadingRoom dimmed={!!book} />}
+      <div className="app">
       {book ? (
         <Reader
           onBack={closeBook}
@@ -50,7 +54,8 @@ export default function App() {
         </>
       )}
 
-      {settingsOpen && <SettingsDrawer onClose={() => setSettingsOpen(false)} />}
-    </div>
+        {settingsOpen && <SettingsDrawer onClose={() => setSettingsOpen(false)} />}
+      </div>
+    </>
   );
 }

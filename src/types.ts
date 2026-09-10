@@ -113,6 +113,8 @@ export interface Settings {
   /** Fallback words-per-minute before we have measured the real rate. */
   baseWpm: number;
   theme: 'dark' | 'light';
+  /** The spectrum backdrop. On by default; off for a plain reading ground. */
+  backdrop: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -131,6 +133,7 @@ export const DEFAULT_SETTINGS: Settings = {
   pauseScale: 1,
   baseWpm: 165,
   theme: 'dark',
+  backdrop: true,
 };
 
 /** Progress reported while a PDF is being ingested. */
